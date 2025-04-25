@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tin Whistle Fingering Chart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Tin Whistle Fingering Chart Generator</h1>
+  <textarea id="abcInput" rows="10" placeholder="Paste ABC notation here..."></textarea>
+  <div>
+    <button onclick="generateCharts()">Generate Charts</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+    <button onclick="downloadPNG()">Download PNG</button>
+  </div>
+  <div id="output" class="chart-grid"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/abcjs@6.4.4/dist/abcjs-basic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

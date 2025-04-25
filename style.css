@@ -1,0 +1,41 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+  }
+  textarea {
+    width: 100%;
+    font-family: monospace;
+    font-size: 14px;
+  }
+  .chart-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  .diagram {
+    border: 1px solid #000;
+    width: 60px;
+    height: 220px;
+    text-align: center;
+    font-size: 14px;
+    position: relative;
+  }
+  .circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid black;
+    margin: 5px auto;
+  }
+  .filled {
+    background-color: black;
+  }
+  .note-label {
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .overblown {
+    color: red;
+    font-weight: bold;
+  }
