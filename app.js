@@ -71,14 +71,17 @@ const FINGERING = {
   }
 
   function parseABCNotes(abcString) {
-    const parsed = ABCJS.parseOnly(abcString);
+    const fixed = abcString.replace(/([a-gA-G])#/g, "^$1");
+    const parsed = ABCJS.parseOnly(fixed);
     if (!parsed || !parsed.length) return [];
 
-    const groups = []
-    var notes = [];
-
-    /*
     console.log(parsed);
+
+    const title = parsed[0].metaText.title;
+
+    const lines = [];
+
+  /*
     console.log(parsed[0]);
     console.log(parsed[0].lines);
     console.log(parsed[0].lines[0]);
@@ -87,30 +90,36 @@ const FINGERING = {
     console.log(parsed[0].lines[0].staff[0].voices);
     */
 
-    voices = parsed[0].lines[0].staff[0].voices
+    for (const line of parsed[0].lines) {
+      const groups = []
+      var notes = [];
 
-    for (const element of voices[0]) {
-        console.log("ELEM", element);
-        if (element.el_type == "note" && element.pitches) {
-          console.log("PITCHES", element.pitches);
+      for (const element of line.staff[0].voices[0]) {
+          console.log("ELEM", element);
+          if (element.el_type == "note" && element.pitches) {
+            console.log("PITCHES", element.pitches);
 
-          for (const pitch of element.pitches) {
-            const step = pitch.pitch; // 0 = C, 1 = C#/Db, ..., 11 = B
-            //const accidentals = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-            //const noteName = accidentals[step % 12];
-            noteName = pitch.name.toUpperCase();
-            if(noteName[0] == '^') noteName = noteName.slice(1)+"#";
-            const octave = Math.floor(pitch.pitch / 7) + 4;
-            console.log(noteName + octave);
-            notes.push(noteName + octave);
+            for (const pitch of element.pitches) {
+              const step = pitch.pitch; // 0 = C, 1 = C#/Db, ..., 11 = B
+              //const accidentals = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+              //const noteName = accidentals[step % 12];
+              noteName = pitch.name.toUpperCase();
+              if(noteName[0] == '^') noteName = noteName.slice(1)+"#";
+              const octave = Math.floor(pitch.pitch / 7) + 4;
+              console.log(noteName + octave);
+              notes.push(noteName + octave);
+            }
+          } else if(element.el_type == "bar") {
+            groups.push(notes);
+            notes = [];
           }
-        } else if(element.el_type == "bar") {
-          groups.push(notes);
-          notes = [];
         }
-      }
-    if (notes.length) groups.push(notes);
-    return groups;
+
+      if (notes.length) groups.push(notes);
+
+      if (groups.length) lines.push(groups);
+    }
+    return [title, lines];
   }
 
   function groupNotes(notes, groupSize = 16) {
@@ -123,19 +132,31 @@ const FINGERING = {
 
   function generateCharts() {
     const abc = document.getElementById('abcInput').value;
-    const groups = parseABCNotes(abc);
+    const [title, lines] = parseABCNotes(abc);
     //console.log(notes);
     //const groups = groupNotes(notes);
-    console.log(groups);
+    console.log(lines);
     const output = document.getElementById('output');
     output.innerHTML = '';
 
-    groups.forEach(group => {
-      group.forEach(note => {
-        const finger = FINGERING[note] || '000000';
-        output.appendChild(drawDiagram(note, finger));
+    const titleContainer = document.createElement('div');
+    titleContainer.className = 'title';
+    titleContainer.textContent = title;
+    output.appendChild(titleContainer);
+
+    lines.forEach (line => {
+      const lineContainer = document.createElement('div');
+      lineContainer.className = 'line';
+
+      line.forEach(group => {
+        group.forEach(note => {
+          const finger = FINGERING[note] || '000000';
+          lineContainer.appendChild(drawDiagram(note, finger));
+        });
+        lineContainer.appendChild(drawEmpty());
       });
-      output.appendChild(drawEmpty());
+
+      output.appendChild(lineContainer);
     });
   }
 
