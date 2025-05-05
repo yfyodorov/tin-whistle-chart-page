@@ -109,6 +109,7 @@ const FINGERING = {
           notes = [];
         }
       }
+    if (notes.length) groups.push(notes);
     return groups;
   }
 
