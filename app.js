@@ -49,7 +49,7 @@ const FINGERING = {
 
   function drawEmpty() {
     const container = document.createElement('div');
-    container.className = 'diagram';
+    container.className = 'diagram-empty';
     const nbsp = '      ';
 
     const label = document.createElement('div');

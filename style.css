@@ -21,6 +21,13 @@ body {
     font-size: 14px;
     position: relative;
   }
+  .diagram-empty {
+    width: 60px;
+    height: 220px;
+    text-align: center;
+    font-size: 14px;
+    position: relative;
+  }
   .circle {
     width: 20px;
     height: 20px;
