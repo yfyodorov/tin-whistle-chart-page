@@ -131,8 +131,15 @@ const FINGERING = {
   }
 
   function generateCharts() {
+    const titleField = document.getElementById('titleInput').value;
     const abc = document.getElementById('abcInput').value;
-    const [title, lines] = parseABCNotes(abc);
+
+    console.log(titleField, '\n', abc);
+
+    const fullAbc = 'X: 1\nT: ' + titleField + '\nL: 1/16\n' + abc;
+    console.log(fullAbc)
+
+    const [title, lines] = parseABCNotes(fullAbc);
     //console.log(notes);
     //const groups = groupNotes(notes);
     console.log(lines);
@@ -172,9 +179,11 @@ const FINGERING = {
   function downloadPDF() {
     html2canvas(document.getElementById('output')).then(canvas => {
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'landscape' });
+      const pdf = new jsPDF({ orientation: 'portrait' });
       const imgData = canvas.toDataURL('image/png');
-      pdf.addImage(imgData, 'PNG', 10, 10, 270, 180);
+//      pdf.addImage(imgData, 'PNG', 10, 10, 270, 180);
+      pdf.addImage(imgData, 'PNG', 10, 10 , 180, 270);
+
       pdf.save('tin_whistle_chart.pdf');
     });
   }
